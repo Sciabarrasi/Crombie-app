@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react";
-import '../globals.css'
 import Image from "next/image";
 import Link from "next/link";
 
@@ -78,7 +77,7 @@ export default function LoginPage() {
                             </div>
 
                             <div className="mt-4 text-right">
-                                <Link href="/register" className="text-[#B23A48] hover:underline">
+                                <Link href="/signup" className="text-[#B23A48] hover:underline">
                                     Registrarse
                                 </Link>
                             </div>

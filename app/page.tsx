@@ -1,9 +1,16 @@
-import LoginPage from "./components/loginForm";
+import Footer from "./components/footer";
+import Navbar from "./components/navbar";
+import About from "./pages/info/about";
 
 export default function Home() {
   return (
-    <div className="test-bg min-h-screen">
-      <LoginPage />
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow">
+        <Navbar />
+        <About />
+      </div>
+      
+      <Footer />
     </div>
   );
 }
