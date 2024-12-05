@@ -2,6 +2,7 @@
 import { useState } from "react";
 import '../globals.css'
 import Image from "next/image";
+import Link from "next/link";
 
 ///rehacer el login teniendo en cuenta los cambios del register
 export default function LoginPage() {
@@ -26,77 +27,91 @@ export default function LoginPage() {
     
     return (
         <>
-            <div className="font-sans">
-            <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-gray-100">
+        <div className="font-sans">
+            <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-custom-background">
                 <div className="relative sm:max-w-sm w-full">
-                {/* Tarjetas de fondo con transformaciones */}
-                <div className="card bg-blue-400 shadow-lg w-full h-full rounded-3xl absolute transform -rotate-6"></div>
-                <div className="card bg-red-400 shadow-lg w-full h-full rounded-3xl absolute transform rotate-6"></div>
+                    {/* Tarjetas de fondo con transformaciones */}
+                    <div className="card bg-[#8C2F39] shadow-lg w-full h-full rounded-3xl absolute transform -rotate-6"></div>
+                    <div className="card bg-[#B23A48] shadow-lg w-full h-full rounded-3xl absolute transform rotate-6"></div>
               
-                {/* Contenedor del formulario */}
-                <div className="relative w-full rounded-3xl px-6 py-4 bg-white shadow-md">
-                    <h1 className="block mt-3 text-sm text-gray-700 text-center font-semibold">
-                    Login
-                    </h1>
+                    {/* Contenedor del formulario con nuevo color de fondo */}
+                    <div className="relative w-full rounded-3xl px-6 py-4 bg-[#FCB9B2] shadow-md">
+                        <h1 className="block mt-3 text-sm text-[#461220] text-center font-semibold">
+                            Login
+                        </h1>
                 
-                    {/* Mostrar error si existe */}
-                    {error && <p className="text-red-500 text-center">{error}</p>}
+                        {/* Mostrar error si existe */}
+                        {error && <p className="text-[#FED0BB] text-center">{error}</p>}
                 
-                <form onSubmit={handleSubmit} className="mt-10">
-                    {/* Campo de correo electrónico */}
-                    <div>
-                        <input
-                        type="email"
-                        name="email"
-                        placeholder="Correo electrónico"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100    focus:ring-0"
-                        />
-                    </div>
-                  
-                    {/* Campo de contraseña */}
-                    <div className="mt-7">
-                        <input
-                        type="password"
-                        name="password"
-                        placeholder="Contraseña"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100    focus:ring-0"
-                        />
-                    </div>
-                  
-                    {/* Botón de login */}
-                    <div className="mt-7">
-                        <button
-                        type="submit"
-                        className="bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition   duration-500 ease-in-out transform hover:-translate-x hover:scale-105"
-                        >
-                        Login
-                        </button>
-                    </div>
+                        <form onSubmit={handleSubmit} className="mt-10">
+                            {/* Campo de correo electrónico */}
+                            <div>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Correo electrónico"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="mt-1 block w-full border-none bg-[#FCB9B2] h-11 rounded-xl shadow-lg hover:bg-[#B23A48] focus:bg-    [#B23A48] focus:ring-0 placeholder-black"
+                                />
+                            </div>
+                      
+                            {/* Campo de contraseña */}
+                            <div className="mt-7">
+                                <input
+                                    type="password"
+                                    name="password"
+                                    placeholder="Contraseña"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="mt-1 block w-full border-none bg-[#FCB9B2] h-11 rounded-xl shadow-lg hover:bg-[#B23A48] focus:bg-    [#B23A48] focus:ring-0 placeholder-black"
+                                />
+                            </div>
+                      
+                            {/* Botón de login */}
+                            <div className="mt-7">
+                                <button
+                                    type="submit"
+                                    className="bg-[#8C2F39] w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none   transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105">
+                                    Login
+                                </button>
+                            </div>
 
-                    {/* Alternativa */}
-                    <div className="mt-6 text-sm text-center text-gray-600">Or continue with</div>
+                            <div className="mt-4 text-right">
+                                <Link href="/register" className="text-[#B23A48] hover:underline">
+                                    Registrarse
+                                </Link>
+                            </div>
 
-                    <div className="mt-4 grid grid-cols-2 gap-4">
-                        <button className="w-full flex items-center justify-center px-4 py-2 border rounded-md hover:bg-gray-100">
-                        <Image
-                            src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Google__G__Logo.svg"
-                            alt="Google"
-                            width={20}
-                            height={20}
-                        />
-                        <span className="ml-2 text-sm">Google</span>
-                        </button>
+                            {/* Alternativas de sesion */}
+                            <div className="mt-6 text-sm text-center text-[#FCB9B2]">También puedes iniciar sesión con</div>
+
+                            <div className="mt-4 flex gap-4">
+                                <button className="w-full flex items-center justify-center px-4 py-2 border rounded-md hover:bg-[#B23A48] border-black">
+                                    <Image
+                                        src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+                                        alt="Google"
+                                        width={20}
+                                        height={20}
+                                    />
+                                    <span className="ml-2 text-sm text-[#461220]">Google</span>
+                                </button>
+
+                                <button className="w-full flex items-center justify-center px-4 py-2 border rounded-md hover:bg-[#B23A48] border-black">
+                                    <Image
+                                        src="https://img.icons8.com/?size=100&id=yGcWL8copNNQ&format=png&color=000000"
+                                        alt="Facebook"
+                                        width={20}
+                                        height={20}
+                                    />
+                                    <span className="ml-2 text-sm text-[#461220]">Facebook</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
-              </div>
+                </div>
             </div>
-          </div>
         </div>
         </>
-      );
-      
+    );
 }
