@@ -7,7 +7,7 @@ export default function Navbar() {
                 {/* Título a la izquierda */}
                 <div className="text-lg font-bold">
                     <Link href="/" className="hover:text-[#FCB9B2]">
-                        CrombiGestor
+                        Gestor
                     </Link>
                 </div>
 
