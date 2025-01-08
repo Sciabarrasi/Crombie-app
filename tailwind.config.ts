@@ -10,6 +10,7 @@ export default {
     extend: {
       colors: {
         "custom-background": "#461220",
+        "custom-bg2": "#F1B5A5"
       },
     },
   },

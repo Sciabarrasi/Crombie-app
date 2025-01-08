@@ -19,9 +19,6 @@ export default function Navbar() {
                     <Link href="/signup" className="hover:text-[#FCB9B2]">
                         Registrarse
                     </Link>
-                    <Link href="/login" className="hover:text-[#FCB9B2]">
-                        Iniciar Sesión
-                    </Link>
                 </div>
             </div>
         </nav>
