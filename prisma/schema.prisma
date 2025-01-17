@@ -19,7 +19,6 @@ model User {
   email String  @unique
   password String
   createdAt DateTime @default(now())
-  expenses Expense[]
 }
 
 model Expense {
@@ -28,6 +27,4 @@ model Expense {
   amount Float 
   description String? 
   date DateTime @default(now())
-  userId Int //FK
-  user User @relation(fields: [userId], references: [id])
 }
