@@ -14,17 +14,20 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement()) //PK
-  name  String
-  email String  @unique
-  password String
-  createdAt DateTime @default(now())
+  id        Int       @id @default(autoincrement()) // PK
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  expenses  Expense[] // Relación con los gastos
 }
 
 model Expense {
-  id  Int @id @default(autoincrement())
-  title String
-  amount Float 
-  description String? 
-  date DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  title       String
+  amount      Float
+  description String?
+  date        DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id]) // Relación con User
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "lib/prisma";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
     try {
@@ -9,6 +9,14 @@ export async function POST(request: NextRequest) {
         if (!email || !password) {
             return NextResponse.json(
                 { error: "El email y la contraseña son obligatorios" },
+                { status: 400 }
+            );
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return NextResponse.json(
+                { error: "El formato del email es inválido" },
                 { status: 400 }
             );
         }
@@ -33,9 +41,15 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Devuelve un mensaje de éxito o un token si usas autenticación
-        return NextResponse.json({ message: "Login exitoso", user }, { status: 200 });
-    } catch (error) {
+        const { id, name } = user;
+        return NextResponse.json(
+            {
+                message: "Login exitoso",
+                user: { id, name, email },
+            },
+            { status: 200 }
+        );
+    } catch (error: unknown) {
         console.error(error);
         return NextResponse.json(
             { error: "Hubo un error al procesar el login" },

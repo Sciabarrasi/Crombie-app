@@ -4,32 +4,36 @@ import { validateExpenseData, validateExpenseId } from "lib/validation";
 
 export async function POST(req: Request) {
     const reqBody = await req.json();
-    const { name, amount } = reqBody;
+    const { name, amount, userId } = reqBody;
 
     const validationError = validateExpenseData({ name, amount });
     if (validationError) {
-        return new Response(JSON.stringify({ error: validationError }), { status: 400 });
+        return new Response(JSON.stringify({ error: validationError}), { status: 400 });
     }
 
-    try {
+    try { 
         const newExpense = await prisma.expense.create({
             data: {
                 title: name,
                 amount: parseFloat(amount as string),
+                userId: userId,
             },
         });
         return new Response(JSON.stringify(newExpense), { status: 201 });
     } catch (error) {
         console.error(error);
         return new Response(
-            JSON.stringify({ error: "Error en la API al crear el gasto" }), { status: 500 }
-        );
+            JSON.stringify({ error: "Error en la API al crear el gasto" }), { status: 500}
+        )
     }
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+    const userId = req.headers.get("userId");
+
     try {
         const expenses = await prisma.expense.findMany({
+            where: { userId: Number(userId) },
             select: {
                 id: true,
                 title: true,
@@ -38,15 +42,19 @@ export async function GET() {
             },
         });
         return NextResponse.json(expenses, { status: 200 });
-    } catch (error) {
-        console.error("Error al obtener los gastos: ", error.message, error.stack);
-        return NextResponse.json({ error: "Error al obtener los gastos" }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Error al obtener los gastos: ", error.message, error.stack);
+        } else { 
+            console.error("Error desconocido: ", error);
+        }
+        return NextResponse.json({ error: "Error al obtener los gastos" }, { status: 500})
     }
 }
 
 export async function PUT(req: NextRequest) {
     try {
-        const { id, title, amount, description } = await req.json(); // Eliminamos userId
+        const { id, title, amount, description, userId } = await req.json();
 
         if (!id || isNaN(Number(id)) || Number(id) <= 0) {
             return NextResponse.json(
@@ -62,6 +70,14 @@ export async function PUT(req: NextRequest) {
             );
         }
 
+        const expense = await prisma.expense.findUnique({ where: { id: Number(id) } });
+        if (expense?.userId !== userId) {
+            return NextResponse.json(
+                { error: "No tienes permiso para modificar este gasto." },
+                { status: 403 }
+            );
+        }
+
         const updateExpense = await prisma.expense.update({
             where: { id: Number(id) },
             data: {
@@ -72,10 +88,15 @@ export async function PUT(req: NextRequest) {
         });
 
         return NextResponse.json(updateExpense, { status: 200 });
-    } catch (err: any) {
-        console.error("Error al actualizar el gasto: ", err.message);
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error("Error al actualizar el gasto: ", err.message);
+        } else { 
+            console.error("Error desconocido: ", err);
+        }
+
         return NextResponse.json(
-            { error: "Ocurrió un error al actualizar el gasto." },
+            { error: "Ocurrió un error al actualizar el gasto. "}, 
             { status: 500 }
         );
     }
@@ -90,13 +111,38 @@ export async function DELETE(req: Request) {
         return NextResponse.json({ error: idValidationError }, { status: 400 });
     }
 
+    const userId = req.headers.get("userId");
+
+    const userIdNumber = userId ? Number(userId) : null;
+
+    if (userIdNumber === null || isNaN(userIdNumber)) {
+        return NextResponse.json(
+            { error: "El ID de usuario no es válido." },
+            { status: 400 }
+        );
+    }
+
     try {
+        const expense = await prisma.expense.findUnique({ where: { id: Number(id) } });
+
+        if (expense?.userId !== userIdNumber) {
+            return NextResponse.json(
+                { error: "No tienes permiso para eliminar este gasto." },
+                { status: 403 }
+            );
+        }
+
         await prisma.expense.delete({
             where: { id: Number(id) },
         });
         return NextResponse.json({ message: "Gasto eliminado correctamente" }, { status: 200 });
-    } catch (error) {
-        console.error("Error al eliminar el gasto: ", error.message);
-        return NextResponse.json({ error: "Error al borrar el gasto." }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Error al eliminar el gasto: ", error.message);
+        } else { 
+            console.error("Error desconocido: ", error);
+        }
+
+        return NextResponse.json({ error: "Error al borrar el gasto. "}, { status: 500 })
     }
 }
