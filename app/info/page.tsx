@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,7 +16,7 @@ export default function InfoPage () {
                 
                 <div className="mt-6 flex justify-center">
                     <Image
-                        src="/images/finanzas2-removebg.png" // Asegúrate de colocar la imagen en la carpeta "public/images"
+                        src="/images/finanzas2-removebg.png"
                         alt="Gestor de Gastos"
                         width={400}
                         height={250}
