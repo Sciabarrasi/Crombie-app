@@ -33,7 +33,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Devuelve un mensaje de éxito o un token si usas autenticación
         return NextResponse.json({ message: "Login exitoso", user }, { status: 200 });
     } catch (error) {
         console.error(error);
