@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useExpenses } from "app/hooks/useExpenses";
 import { Expense } from "@prisma/client";
 import ExpenseEditor from "app/components/expenseEditor";
-import AuthMiddleware from "middleware/authMiddleware";
 
 export default function Dashboard() {
   const {
@@ -74,7 +73,6 @@ export default function Dashboard() {
   };
 
   return (
-    <AuthMiddleware>
         <div className="min-h-screen bg-[#F1B5A5] flex justify-center items-start py-6">
         <div className="w-full sm:max-w-2xl p-6 bg-[#FCB9B2] shadow-md rounded-3xl">
           <h1 className="text-center text-2xl font-semibold text-[#461220] mb-6">
@@ -187,6 +185,5 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-    </AuthMiddleware>
   );
 }

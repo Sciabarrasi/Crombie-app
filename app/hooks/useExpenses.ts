@@ -14,11 +14,16 @@ export const useExpenses = () => {
     try {
       const response = await axios.get("/api/expense");
       setExpenses(response.data);
-    } catch (err: any) {
-      setError(err?.message || "Error al hacer fetch a expenses");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error al obtener los gastos: ", err.message);
+      } else {
+        console.error("Error desconocido al obtener los gastos: ", err);
+      }
     } finally {
       setLoading(false);
     }
+
   }, []);
 
   const addExpense = useCallback(async (newExpense: Partial<Expense>) => {
@@ -44,8 +49,12 @@ export const useExpenses = () => {
       });
 
       setExpenses((prev) => [...prev, response.data]);
-    } catch (err: any) {
-      setError(err?.response?.data?.error || err?.message || "Error al agregar gasto.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error al agregar el gasto: ", err.message);
+      } else {
+        console.error("Error desconocido al agregar el gasto: ", err);
+      }
     } finally {
       setLoading(false);
     }
@@ -86,8 +95,12 @@ export const useExpenses = () => {
             )
           );
         }
-      } catch (err: any) {
-        setError(err?.response?.data?.error || err?.message || "Error al actualizar el gasto.");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error al actualizar el gasto: ", err.message);
+        } else {
+          console.error("Error desconocido al actualizar el gasto: ", err);
+        }
       } finally {
         setLoading(false);
       }

@@ -106,6 +106,9 @@ export async function DELETE(req: Request) {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
 
+    if (id === null) {
+        return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
     const idValidationError = validateExpenseId(id);
     if (idValidationError) {
         return NextResponse.json({ error: idValidationError }, { status: 400 });
