@@ -3,10 +3,14 @@ import prisma from "lib/prisma";
 import bcrypt from "bcryptjs";
 import { Prisma } from "@prisma/client";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    const userId = parseInt(params.id);
+type RouteContext = {
+    params: Promise<{ params: string }>;
+};
 
-    if (isNaN(userId)) {
+export async function GET(request: NextRequest, context: RouteContext) {
+    const { params } = await context.params;
+
+    if (isNaN(Number(params))) {
         return NextResponse.json(
             { error: "ID de usuario inválido" },
             { status: 400 }
@@ -15,7 +19,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
     try {
         const user = await prisma.user.findUnique({
-            where: { id: userId },
+            where: { id: Number(params) },
         });
 
         if (!user) {
@@ -35,10 +39,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    const userId = parseInt(params.id);
+export async function PUT(request: NextRequest, context: RouteContext) {
+    const { params } = await context.params;
 
-    if (isNaN(userId)) {
+    if (isNaN(Number(params))) {
         return NextResponse.json(
             { error: "ID de usuario inválido" },
             { status: 400 }
@@ -63,7 +67,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         }
 
         const updatedUser = await prisma.user.update({
-            where: { id: userId },
+            where: { id: Number(params) },
             data: updateData,
         });
 
@@ -77,10 +81,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    const userId = parseInt(params.id);
+export async function DELETE(request: NextRequest, context: RouteContext) {
+    const { params } = await context.params;
 
-    if (isNaN(userId)) {
+    if (isNaN(Number(params))) {
         return NextResponse.json(
             { error: "ID de usuario inválido" },
             { status: 400 }
@@ -89,7 +93,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     try {
         const deletedUser = await prisma.user.delete({
-            where: { id: userId },
+            where: { id: Number(params) },
         });
 
         return NextResponse.json(

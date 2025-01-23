@@ -20,6 +20,12 @@ model User {
   password  String
   createdAt DateTime  @default(now())
   expenses  Expense[] // Relación con los gastos
+  role      Role @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model Expense {

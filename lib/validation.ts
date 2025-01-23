@@ -13,7 +13,7 @@ export function validateExpenseData(data: ExpenseData): string | null {
     return null;
 }
 
-export function validateExpenseId(id: any): string | null {
+export function validateExpenseId(id: number | string): string | null {
     if (!id || isNaN(Number(id))) {
         return "El ID proporcionado no es válido.";
     }
