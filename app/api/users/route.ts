@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { config as authOptions } from "@/auth.config";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { IncomingMessage, ServerResponse } from "http";
 
-async function getSession(request: NextRequest) {
+async function getSession(request: NextRequest): Promise<Session | null> {
     const cookies = request.headers.get('cookie') || '';
     const req = {
         headers: { cookie: cookies }
@@ -91,9 +91,11 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
     try {
         const session = await getSession(request);
-        if (!session || !session.user || !session.user.id) {
+        if (!session) {
             return NextResponse.json({ error: "No autenticado." }, { status: 401 });
         }
+
+        const userId = (session.user as { id: string }).id;
 
         const { id, name, email, password } = await request.json();
 
@@ -102,7 +104,7 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: "Todos los campos son obligatorios" }, { status: 400 });
         }
 
-        if (session.user.id !== id) {
+        if (userId !== id) {
             return NextResponse.json({ error: "No autorizado para actualizar este usuario." }, { status: 403 });
         }
 
@@ -131,9 +133,11 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
     try {
         const session = await getSession(request);
-        if (!session) {
+        if (!session || !session.user) {
             return NextResponse.json({ error: "No autenticado." }, { status: 401 });
         }
+
+        const userId = (session.user as { id: string }).id;
 
         const { id } = await request.json();
 
@@ -142,7 +146,7 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: "Se requiere un ID válido para eliminar el usuario." }, { status: 400 });
         }
 
-        if (session.user.id !== id) {
+        if (userId !== id) {
             return NextResponse.json({ error: "No autorizado para eliminar este usuario." }, { status: 403 });
         }
 

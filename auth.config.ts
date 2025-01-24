@@ -3,7 +3,6 @@ import CreadentialsProvider from "next-auth/providers/credentials";
 import prisma from "./lib/prisma";
 import bcrypt from 'bcryptjs'; 
 
-
 export const config: AuthOptions = {
     providers: [
         CreadentialsProvider({
@@ -55,4 +54,7 @@ export const config: AuthOptions = {
     pages: {
         signIn: "/auth/login",
     },
+    session: {
+        maxAge: 1,
+    }
 };

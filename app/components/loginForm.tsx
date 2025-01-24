@@ -1,9 +1,5 @@
 "use client"
 
-//import { useLoginForm } from 'app/hooks/useLoginForm';
-//import AuthForm from './AuthForm';
-//import { useRouter } from 'next/navigation';
-//import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { useState } from 'react';
 import Image from 'next/image'
@@ -11,11 +7,8 @@ import { signIn } from 'next-auth/react';
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Mail, Lock } from "lucide-react";
 
-//MODIFICAR LOS ESTILOS
 
 export default function LoginForm () {
-    //const { email, password, error, loading, setEmail, setPassword, handleSubmit } = useLoginForm();
-
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: { email: "", password: "" }
     });
@@ -37,10 +30,10 @@ export default function LoginForm () {
             setAuthError('Usuario o contraseña incorrectos');
             setIsLoading(false);
         } else {
-        // Esperar un poco menos y verificar la sesión antes de redirigir
             await new Promise(resolve => setTimeout(resolve, 500));
-            window.location.href = '/dashboard';  // Usar redirección del navegador en lugar de router.push
+            window.location.href = '/dashboard';  
         }
+        //arreglar la manera en la que se manejan los errores
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
         setAuthError('Ocurrió un error al iniciar sesión');
