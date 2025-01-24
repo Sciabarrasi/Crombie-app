@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import axios from "axios";
 import { Expense } from "@prisma/client";
-
+  //BORRAR A LA MIERDA ESTO
+  //MANEJAR TODO DESDE EL DASHBOARD
 export const useExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(false);
