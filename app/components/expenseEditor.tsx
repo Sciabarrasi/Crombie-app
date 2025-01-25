@@ -19,16 +19,20 @@ const ExpenseEditor: React.FC<ExpenseEditorProps> = ({
   const [description, setDescription] = useState(expense.description || "");
   const [error, setError] = useState<string | null>(null);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() || isNaN(amount) || amount <= 0) {
       setError("Todos los campos son obligatorios y el monto debe ser mayor a 0.");
       return;
     }
 
-    onSave(expense.id, { title, amount, description });
-    setError(null);
-
-    onCancel();
+    try {
+      await onSave(expense.id, { title, amount, description });
+      setError(null);
+      onCancel();
+    } catch (error) {
+      setError("Ocurrió un error al guardar los cambios.");
+      console.error("Error al guardar los cambios: ", error);
+    }
   };
 
   return (
