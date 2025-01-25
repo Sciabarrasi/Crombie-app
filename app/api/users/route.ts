@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession, Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { config as authOptions } from "@/auth.config";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { IncomingMessage, ServerResponse } from "http";
+import { Session } from "next-auth";
 
 async function getSession(request: NextRequest): Promise<Session | null> {
     const cookies = request.headers.get('cookie') || '';

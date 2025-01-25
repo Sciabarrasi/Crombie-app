@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { config as authOptions } from "@/auth.config";
 import { IncomingMessage, ServerResponse } from "http";
+
+interface SessionWithUser {
+    user: {
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+    };
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -24,16 +32,16 @@ export async function POST(request: NextRequest) {
             removeHeader: () => null,
             writeHead: () => null,
             end: () => null
-        } as unknown as ServerResponse<IncomingMessage>
+        } as unknown as ServerResponse<IncomingMessage>;
 
-        const session = await getServerSession(req, res, authOptions);
+        const session = await getServerSession(req, res, authOptions) as SessionWithUser;
         console.log("session: ", session);
 
-        if (session) {
+        if (session && session.user) {
             return NextResponse.json(
                 {
                     message: "Login exitoso",
-                    user: session.user,
+                    user: session.user, 
                 },
                 { status: 200 }
             );
