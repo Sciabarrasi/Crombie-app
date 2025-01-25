@@ -1,79 +1,54 @@
 "use client"
 
 import { Controller, useForm } from "react-hook-form";
-import { useState } from 'react';
 import Image from 'next/image'
-import { signIn } from 'next-auth/react';
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertCircle, Mail, Lock } from "lucide-react";
-
+import { useLogin } from "../hooks/useLogin";
 
 export default function LoginForm () {
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: { email: "", password: "" }
     });
-    const [authError, setAuthError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const { authError, isLoading, login } = useLogin();
 
     const onSubmit = handleSubmit(async (data) => {
-        setAuthError('');
-        setIsLoading(true);
-    
-        try {
-        const res = await signIn('credentials', {
-            redirect: false,
-            email: data.email,
-            password: data.password
-        });
-      
-        if (!res?.ok) {
-            setAuthError('Usuario o contraseña incorrectos');
-            setIsLoading(false);
-        } else {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            window.location.href = '/dashboard';  
-        }
-        //arreglar la manera en la que se manejan los errores
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (error) {
-        setAuthError('Ocurrió un error al iniciar sesión');
-        setIsLoading(false);
-        }
+        await login(data.email, data.password);
     });
 
     const errorVariants = {
         initial: { opacity: 0, y: -10, height: 0 },
         animate: { opacity: 1, y: 0, height: 'auto' },
         exit: { opacity: 0, y: -10, height: 0 }
-      };
+    };
     
-      const loadingVariants = {
+    const loadingVariants = {
         initial: { opacity: 0, scale: 0.8 },
         animate: { 
-          opacity: 1, 
-          scale: 1,
-          transition: { duration: 0.3 }
+            opacity: 1, 
+            scale: 1,
+            transition: { duration: 0.3 }
         },
         exit: { 
-          opacity: 0,
-          scale: 0.8,
-          transition: { duration: 0.2 }
+            opacity: 0,
+            scale: 0.8,
+            transition: { duration: 0.2 }
         }
-      };
+    };
     
-      const pulseVariants = {
+    const pulseVariants = {
         initial: { scale: 1 },
         animate: {
-          scale: [1, 1.2, 1],
-          transition: {
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }
+            scale: [1, 1.2, 1],
+            transition: {
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }
         }
-      };
+    };
 
-      return (
+    return (
         <div className="font-sans">
             <div className="relative min-h-screen flex flex-col sm:justify-center items-center bg-custom-background">
                 <div className="relative sm:max-w-sm w-full">
