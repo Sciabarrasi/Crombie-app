@@ -1,59 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "lib/prisma";
-import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth/next";
+import { config as authOptions } from "@/auth.config";
+import { IncomingMessage, ServerResponse } from "http";
+
+interface SessionWithUser {
+    user: {
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+    };
+}
 
 export async function POST(request: NextRequest) {
     try {
-        const { email, password } = await request.json();
+        const cookies = request.headers.get('cookie') || '';
 
-        if (!email || !password) {
+        console.log("cookies: ", cookies);
+
+        const req = {
+            headers: {
+                cookie: cookies
+            }
+        } as unknown as IncomingMessage & {
+            cookies: Partial<{ [key: string]: string }>
+        };
+
+        const res = {
+            getHeader: () => null,
+            setCookie: () => null,
+            setHeader: () => null,
+            removeHeader: () => null,
+            writeHead: () => null,
+            end: () => null
+        } as unknown as ServerResponse<IncomingMessage>;
+
+        const session = await getServerSession(req, res, authOptions) as SessionWithUser;
+        console.log("session: ", session);
+
+        if (session && session.user) {
             return NextResponse.json(
-                { error: "El email y la contraseña son obligatorios" },
-                { status: 400 }
+                {
+                    message: "Login exitoso",
+                    user: session.user, 
+                },
+                { status: 200 }
             );
-        }
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return NextResponse.json(
-                { error: "El formato del email es inválido" },
-                { status: 400 }
-            );
-        }
-
-        const user = await prisma.user.findUnique({
-            where: { email },
-        });
-
-        if (!user) {
-            return NextResponse.json(
-                { error: "Usuario no encontrado" },
-                { status: 404 }
-            );
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
+        } else { 
             return NextResponse.json(
                 { error: "Credenciales inválidas" },
                 { status: 401 }
             );
         }
-
-        const { id, name } = user;
-        return NextResponse.json(
-            {
-                message: "Login exitoso",
-                user: { id, name, email },
-            },
-            { status: 200 }
-        );
     } catch (error: unknown) {
-        console.error(error);
-        return NextResponse.json(
-            { error: "Hubo un error al procesar el login" },
-            { status: 500 }
-        );
+        if (error instanceof Error) {
+            console.error("Error al procesar la solicitud.", error.message);
+        } else { 
+            console.error("Error desconocido: ", error);
+        }
+
+        return NextResponse.json({ error: "Hubo un error al procesar la solicitud" }, { status: 500 });
     }
 }
