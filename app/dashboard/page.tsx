@@ -54,7 +54,7 @@ export default function Dashboard() {
 
     await updateExpense(id, updateData);
     setFormError(null);
-    setEditingExpense(null); // Cerrar el editor después de la actualización
+    setEditingExpense(null);
   };
 
   const handleDeleteExpense = async (id: number) => {

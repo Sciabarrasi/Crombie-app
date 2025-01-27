@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { validateExpenseData } from "@/lib/validation"; //validateexpenseId no importado
+import { validateExpenseData } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
     try {

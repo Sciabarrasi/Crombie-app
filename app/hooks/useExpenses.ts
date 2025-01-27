@@ -6,7 +6,7 @@ export const useExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const userId = 1; // Replace this with the actual userId from your authentication logic
+  const userId = 1;
 
   const fetchExpenses = useCallback(async () => {
     setLoading(true);
