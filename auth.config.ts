@@ -1,11 +1,11 @@
 import { AuthOptions } from "next-auth";
-import CreadentialsProvider from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const config: AuthOptions = {
   providers: [
-    CreadentialsProvider({
+    CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "Tu Email" },
