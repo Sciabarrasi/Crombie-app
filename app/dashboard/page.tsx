@@ -65,7 +65,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-[#F1B5A5] flex justify-center items-start py-6">
       <div className="w-full sm:max-w-2xl p-6 bg-[#FCB9B2] shadow-md rounded-3xl">
         <h1 className="text-center text-2xl font-semibold text-[#461220] mb-6">
-          Dashboard de Gastos
+          Tablero de Gastos
         </h1>
 
         <form onSubmit={handleAddExpense} className="flex gap-4">
