@@ -54,7 +54,4 @@ export const config: AuthOptions = {
   pages: {
     signIn: "/auth/login",
   },
-  session: {
-    maxAge: 1,
-  },
 };
